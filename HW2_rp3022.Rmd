@@ -1,21 +1,19 @@
 ---
-title: "Simple document"
-output: html_document
+title: "Homework 2"
+output: github_document
 ---
 
-I'm an R Markdown document! 
-
-# Section 1
-
-Here's a **code chunk** that samples from 
-a _normal distribution_:
-
-```{r}
-samp = rnorm(100)
-length(samp)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, message = FALSE)
 ```
 
-# Section 2
 
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
+### Problem 0
+ 
+Created an R project - p8105_hw2_rp3022 and a subdirectory "data" to store all the files to be used for the homework.
+Loading the required libraries
+
+```{r load_libraries}
+library(tidyverse)
+library(readxl)
+```
