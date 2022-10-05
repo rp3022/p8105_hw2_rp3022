@@ -142,4 +142,11 @@ unemp_df = read_csv(
                values_to = "unemployment")%>%
   mutate(month = str_to_title(month))
 ```
+```{r}
+pomo_snp = left_join(pols_df, snp_df)
+```
+```{r}
+pomo_unemp = left_join(pomo_snp, unemp_df)
+```
+
 
