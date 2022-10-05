@@ -77,3 +77,49 @@ trans_ent %>%
 * There are 84 stations that are ADA compliant
 * 37.7% of station entrances and exits without vending allow entrance.
 * 60 distinct stations serve on the A train. Of the stations that serve A train, 17 are ADA compliant
+
+
+## Question 2
+
+```{r Mr. trashwheel}
+trash_wheel_mr =read_excel("data/Trash Wheel Collection Data.xlsx", sheet= "Mr. Trash Wheel", range ="A2:N549")%>%
+  janitor:: clean_names()%>%
+  drop_na(dumpster)%>%
+  mutate (sports_balls = as.integer(sports_balls), wheel="mr")
+
+```
+```{r Professor trashwheel}
+trash_wheel_prof = read_excel("data/Trash Wheel Collection Data.xlsx", sheet= "Professor Trash Wheel", range ="A2:M96") %>%
+  janitor::clean_names() %>% 
+  drop_na(dumpster)%>%
+  mutate(year=as.character(year), wheel="professor")
+```
+
+```{r combine}
+combined_trash_wheel = bind_rows(trash_wheel_mr, trash_wheel_prof)%>%
+  janitor::clean_names()
+```
+
+
+`r skimr::skim(combined_trash_wheel)`
+
+### Description of the dataset:
+
+The total number of observations (rows) are __`r nrow(combined_trash_wheel)`__ and the total number of variables(columns) are **`r ncol(combined_trash_wheel)`**. The numeric variables are 
+weight_tons : the weight of trash collected, 
+volume_cubic_yards : volume of trash collected in cubic yards,
+Additionally there are variables to calculate number of plastic bottles , polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls collected and number of homes empowered.
+The character variables are year and month and there is a date variable.
+The total weight of trash collected by Professor trash wheel is **`r sum(trash_wheel_prof$weight_tons, na.rm = TRUE)`** tons
+The total number of sports balls collected by Mr. Trash Wheel is **`r sum(trash_wheel_mr[which(trash_wheel_mr$year == "2020" ), "sports_balls"])`**
+
+## problem 3
+
+```{r polsmonth}
+pols_df = read_csv("data/fivethirtyeight_datasets/pols-month.csv")%>%
+  janitor::clean_names()%>%
+   separate(col=mon, into=c( "month", "day", "year"), sep = '-', convert = TRUE)%>%
+  mutate(month = month.abb[month],
+         president = case_when (prez_gop== 1 ~ "gop", prez_dem== 1 ~"dem"))%>%
+  select(-prez_gop, -prez_dem, -day)
+```
