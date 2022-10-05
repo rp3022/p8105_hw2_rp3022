@@ -105,11 +105,11 @@ combined_trash_wheel = bind_rows(trash_wheel_mr, trash_wheel_prof)%>%
 
 ### Description of the dataset:
 
-The total number of observations (rows) are __`r nrow(combined_trash_wheel)`__ and the total number of variables(columns) are **`r ncol(combined_trash_wheel)`**. The numeric variables are 
+The total number of observations (rows) are __`r nrow(combined_trash_wheel)`__ and the total number of variables(columns) are **`r ncol(combined_trash_wheel)`**.The names of the variables are **`r colnames(combined_trash_wheel)`** The **numeric variables** are 
 weight_tons : the weight of trash collected, 
 volume_cubic_yards : volume of trash collected in cubic yards,
-Additionally there are variables to calculate number of plastic bottles , polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls collected and number of homes empowered.
-The character variables are year and month and there is a date variable.
+and the variables to calculate number of plastic bottles , polystyrene, cigarette butts, glass bottles, grocery bags, chips bags, sports balls collected and number of homes empowered.
+The **character variables** are year and month and there is a **date variable**.
 The total weight of trash collected by Professor trash wheel is **`r sum(trash_wheel_prof$weight_tons, na.rm = TRUE)`** tons
 The total number of sports balls collected by Mr. Trash Wheel is **`r sum(trash_wheel_mr[which(trash_wheel_mr$year == "2020" ), "sports_balls"])`**
 
@@ -118,7 +118,7 @@ The total number of sports balls collected by Mr. Trash Wheel is **`r sum(trash_
 ```{r polsmonth}
 pols_df = read_csv("data/fivethirtyeight_datasets/pols-month.csv")%>%
   janitor::clean_names()%>%
-   separate(col=mon, into=c( "month", "day", "year"), sep = '-', convert = TRUE)%>%
+   separate(col=mon, into=c(  "year", "month", "day"), sep = '-', convert = TRUE)%>%
   mutate(month = month.abb[month],
          president = case_when (prez_gop== 1 ~ "gop", prez_dem== 1 ~"dem"))%>%
   select(-prez_gop, -prez_dem, -day)
@@ -149,4 +149,13 @@ pomo_snp = left_join(pols_df, snp_df)
 pomo_unemp = left_join(pomo_snp, unemp_df)
 ```
 
+* The dataset **pols-month.csv** describes the number of national politicians who were either democratic or republic at a given time. It initially had 822 observations and 9 variables. Individual columns of "prez_dem" and "prez_gop" were combined to create "president" column.  The variable mon was divided into 3 variables "year", "month",and  "day. The resulting data set **"pols_df** had **`r nrow(pols_df)`** observations, **`r ncol(pols_df)` variables**. The variables were **`r colnames(pols_df)`** and the range of years was **`r range(pols_df$year)`**
+
+* The dataset **snp.csv** describes the closing values of S&P stock index at a given time period. It initially had 787 observations and 2 variables. No columns or observations  were added or removed. The resulting data set **"snp_df** had **`r nrow(snp_df)` observations** and **`r ncol(snp_df)` variables**. The variables were **`r colnames(snp_df)`** and the range of years was **`r range(snp_df$year)`**
+
+* The dataset **unemployment.csv** provides information about percentage of unemployment at a given time. It initially had 68 observations and 13 variables.The dataset was switched from a wide to a long format. The resulting dataset **"unemp_df"** had **`r nrow(unemp_df)` observations** and **`r ncol(unemp_df)` variables**. The variables were **`r colnames(unemp_df)`** and the range of years was **`r range(unemp_df$year)`**
+
+* The **first combined dataset "pomo_snp"** was created using dataset pols_df and snp_df. It had **`r nrow(pomo_snp)` observations** and **`r ncol(pomo_snp)` variables** and the range of years was **`r range(pomo_snp$year, na.rm=TRUE)`** It had variables **`r colnames(pomo_snp)`**. 
+
+* The **second combined dataset "pomo_unemp** was created by merging "pomo_snp" and "unemp_df". It has **`r nrow(pomo_unemp)` observations** and **`r ncol(pomo_unemp)` variables**. The range of years is **`r range(pomo_unemp$year, na.rm=TRUE)`**. It has variables **`r colnames(pomo_unemp)`**
 
