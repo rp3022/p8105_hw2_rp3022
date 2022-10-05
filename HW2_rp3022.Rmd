@@ -133,4 +133,13 @@ snp_df = read_csv("data/fivethirtyeight_datasets/snp.csv")%>%
   select(-day)%>%
   select(year, month, everything())
 ```
+```{r}
+unemp_df = read_csv(
+  "data/fivethirtyeight_datasets/unemployment.csv")%>%
+  janitor:: clean_names()%>%
+  pivot_longer(jan:dec,
+               names_to = "month",
+               values_to = "unemployment")%>%
+  mutate(month = str_to_title(month))
+```
 
